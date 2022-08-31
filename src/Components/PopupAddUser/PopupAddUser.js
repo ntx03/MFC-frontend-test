@@ -1,7 +1,8 @@
 import './PopupAddUser.css';
 import { useState } from 'react';
+import { addUsers } from '../../utils/api';
 
-function PopupAddUser({ popupAdd, setPopupAdd }) {
+function PopupAddUser({ popupAdd, setPopupAdd, setUsers, users }) {
     const [nameUser, setNameUser] = useState('');
     const changeNameUser = (e) => {
         setNameUser(e.target.value);
@@ -39,6 +40,35 @@ function PopupAddUser({ popupAdd, setPopupAdd }) {
         setImage(e.target.value);
     }
 
+    const closePopup = () => {
+        setPopupAdd(false);
+    }
+    // добавляем пользователя в БД
+    const addUser = () => {
+        const user = {
+            email: email,
+            firstname: nameUser,
+            id: Math.random() * 1000,
+            image: image,
+            ip: ip,
+            lastname: lastNameUser,
+            macAddress: mac,
+            password: password,
+            uuid: String(Math.random() * 10000),
+            website: website,
+            login: login
+        }
+        addUsers(user)
+            .then(() => {
+                // setUsers([user, ...users]);
+                //closePopup();
+            })
+            .catch((e) => {
+                console.log(e.message);
+            })
+        setUsers([user, ...users]);
+        closePopup();
+    }
 
     return (
         <div className={popupAdd ? 'popup__add popup__add_open' : 'popup__add'} >
@@ -82,9 +112,9 @@ function PopupAddUser({ popupAdd, setPopupAdd }) {
                         <input type='text' value={image || ''} onChange={changeImage} className='popup__data-input' />
                     </div>
                 </div>
-                <button className='popup-add__button' onClick={() => setPopupAdd(false)} >Добавить в БД</button>
+                <button className='popup-add__button' onClick={addUser} >Добавить в БД</button>
             </div>
-            <div className='popup-add__overlay' onClick={() => setPopupAdd(false)} ></div>
+            <div className='popup-add__overlay' onClick={closePopup} ></div>
         </div>
     );
 }

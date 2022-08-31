@@ -2,6 +2,7 @@ import React from 'react';
 import './Main.css';
 import '../Main/User/User.css';
 import User from './User/User';
+import { getUsers } from '../../utils/api';
 
 function Main({ setPopupDelete, setUserInformation, users, setUsers, setPopup, setPopupError, setPopupAdd }) {
 
@@ -10,12 +11,7 @@ function Main({ setPopupDelete, setUserInformation, users, setUsers, setPopup, s
         setUsersNumber(e.target.value);
     }
     const uploadUsers = () => {
-        fetch(`https://fakerapi.it/api/v1/users?_quantity=${usersNumber}`)
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                } else console.log(res.status);
-            })
+        getUsers(usersNumber)
             .then((res) => {
                 setUsers(users.concat(res.data));
                 setPopup(true);
@@ -25,7 +21,24 @@ function Main({ setPopupDelete, setUserInformation, users, setUsers, setPopup, s
                 console.log(e.message);
                 setPopupError(true);
             })
+        // fetch(`https://fakerapi.it/api/v1/users?_quantity=${usersNumber}`)
+        //     .then((res) => {
+        //         if (res.ok) {
+        //             return res.json();
+        //         } else console.log(res.status);
+        //     })
+        //     .then((res) => {
+        //         setUsers(users.concat(res.data));
+        //         setPopup(true);
+        //         setPopupError(false);
+        //     })
+        //     .catch((e) => {
+        //         console.log(e.message);
+        //         setPopupError(true);
+        //     })
     }
+
+
     return (
         <main className='main'>
             <h1 className='main__title'>База данных пользователей приложения</h1>

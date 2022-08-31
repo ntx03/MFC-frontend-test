@@ -5,6 +5,7 @@ import './App.css';
 import PopupDelete from '../PopupDelete/PopupDelete';
 import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
 import PopupAddUser from '../PopupAddUser/PopupAddUser';
+import { getUsers } from '../../utils/api';
 
 
 function App() {
@@ -13,12 +14,8 @@ function App() {
 
   // берем пользователей при загрузке сайта
   React.useEffect(() => {
-    fetch('https://fakerapi.it/api/v1/users?_quantity=20')
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else console.log(res.status);
-      })
+    const quantityUser = 20;
+    getUsers(quantityUser)
       .then((res) => {
         setUsers(res.data);
       })
@@ -54,7 +51,7 @@ function App() {
       </div>
       <PopupDelete popupDelete={popupDelete} setPopupDelete={setPopupDelete} userInformation={userInformation} setUsers={setUsers} users={users} />
       <PopupSuccessfully popup={popup} setPopup={setPopup} popupError={popupError} />
-      <PopupAddUser popupAdd={popupAdd} setPopupAdd={setPopupAdd} />
+      <PopupAddUser popupAdd={popupAdd} setPopupAdd={setPopupAdd} users={users} setUsers={setUsers} />
     </div>
   );
 }
